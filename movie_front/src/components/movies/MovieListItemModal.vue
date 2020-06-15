@@ -8,7 +8,7 @@
             <div class="scale"><img class="posterimg" 
             v-bind:src="'https://image.tmdb.org/t/p/w342/'+ movie.poster_path "
             alt="posterUrl">
-            <h5 id=" header" class="postertitle postercard-body text-white">{{ movie.title }}</h5>
+            <h5 id=" header" class="postertitle postercard-body">{{ movie.title }}</h5>
 
             </div>
             
@@ -182,26 +182,33 @@ export default {
     /* position:fixed; */
     /* top:100px; */
 }
-.postertitle{
-    position: relative;
-    bottom: 40px;
-    font-size: 27px;
-    opacity:0;
-}
+
 .scale {
   transform: scale(1);
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);
   -o-transform: scale(1);
-  transition: all 0.7s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+  transition: all 0.5s ease-in-out;   /* 부드러운 모션을 위해 추가*/
 }
-.posterimg:hover.postertitle{
-    opacity: 0.6;
+
+.scale:hover .postertitle{
+    opacity: 1;
+    text-align: center;
+    color:#ffff;
+
 }
-/* .postertitle:hover{
-    opacity: 0.6;
-} */
+.posterimg:hover{
+    opacity: 0.4;
+}
+
+
+.postertitle{
+    position: relative;
+    bottom: 200px;
+    font-size: 27px;
+    opacity:0;
+}
 .scale:hover {
   transform: scale(1.2);
   -webkit-transform: scale(1.2);
@@ -210,7 +217,7 @@ export default {
   -o-transform: scale(1.2);
   /* opacity: ; */
 }
-.scale:hover:after {
+/* .scale:hover:after {
     opacity: 0;
-}
+} */
 </style>
