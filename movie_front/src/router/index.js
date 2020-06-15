@@ -75,12 +75,12 @@ Vue.use(VueRouter)
 
   //admin page
   {
-    path: '/adminPage',
+    path: '/adminpage/',
     name: 'AdminPage',
     component: AdminPage,
     children: [
       {
-        path: '/createmovie',
+        path: '',
         name: 'CreateMovie',
         component: CreateMovie
       },

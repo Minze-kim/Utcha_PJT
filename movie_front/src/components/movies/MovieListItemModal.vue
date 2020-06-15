@@ -1,14 +1,18 @@
 <template>
-    <div>
-        <h5>{{ movie.title }}</h5>
-        <a
+    <div class="modalitems">
+        
+        <a 
         data-toggle="modal"
         v-bind:data-target="dataTarget" >
-            <img class="posterimg" 
+
+            <div class="scale"><img class="posterimg" 
             v-bind:src="'https://image.tmdb.org/t/p/w342/'+ movie.poster_path "
             alt="posterUrl">
+            <h5 id=" header" class="postertitle postercard-body text-white">{{ movie.title }}</h5>
+
+            </div>
+            
         </a>
-        
         <div class="modal fade" 
         :id="movieId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -23,15 +27,23 @@
                 <img class="img-fluid poster-url" :src="'https://image.tmdb.org/t/p/w185/'+ movie.poster_path " alt="poster-url">
                 <hr>
                 <!-- <h3 class="badge badge-info">{{ ㅠ}}</h3> -->
-                <p v-text="movie.overview"></p>
+                <h5 class="text-left text-bold">줄거리</h5>
+                <p class="text-left" v-text="movie.overview"></p>
                 <hr>
+                <h5 class="text-left text-bold">유저 평점</h5>
                 <ul v-for="(comment,index) in comments" :key="comment.id">
                     <li v-text="comment.content"></li>
                     <span><button v-if="comment.user == currentUser" @click="deleteComment(comment.id,index)">삭제</button></span>
-
                 </ul>
-                <input type="text" v-model="commentData.content" required>
-                <span><button @click="createComment" type="button">작성</button></span>
+                <hr>
+                <div class="form-row">
+                    <div class="col-8">
+                        <input class="form-control" type="text" v-model="commentData.content" required>
+                    </div>
+                    <div class="col-4">
+                        <button @click="createComment" class="btn btn-primary">댓글등록</button>
+                    </div>
+                </div>
         
             </div>
 
@@ -165,8 +177,40 @@ export default {
 }
 </script>
 
-<style>
-    img.poster-url {
-        width: 100%;
-    }
+<style scoped>
+.modalitems{
+    /* position:fixed; */
+    /* top:100px; */
+}
+.postertitle{
+    position: relative;
+    bottom: 40px;
+    font-size: 27px;
+    opacity:0;
+}
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.7s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.posterimg:hover.postertitle{
+    opacity: 0.6;
+}
+/* .postertitle:hover{
+    opacity: 0.6;
+} */
+.scale:hover {
+  transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  /* opacity: ; */
+}
+.scale:hover:after {
+    opacity: 0;
+}
 </style>

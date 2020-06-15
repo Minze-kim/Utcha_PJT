@@ -1,12 +1,13 @@
 <template>
   <div>
-        <p v-if="!movieToDelete">삭제를 원하는 영화를 선택해주세요</p>
-        <select v-model="movieToDelete">
+        <h1 v-if="!movieToDelete">삭제를 원하는 영화를 선택해주세요</h1>
+        <h1 v-if="movieToDelete" class="text-center">영화 삭제하기</h1>
+        <select class="form-control bg-dark text-white" v-model="movieToDelete">
             <option v-for="movie in movies" :key="movie.id" :value="movie">
                 {{ movie.title }}
             </option>
-        </select>
-        <button v-if="movieToDelete" v-on:click="deleteMovie">삭제</button>
+        </select><br>
+        <button class="btn btn-primary float-right" v-if="movieToDelete" v-on:click="deleteMovie">삭제</button>
   </div>
 </template>
 
@@ -47,6 +48,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+* {
+  font-family: 'Jua', sans-serif;
+  color: white;
+  text-align: left;
+}
 </style>

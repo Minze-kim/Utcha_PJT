@@ -14,6 +14,8 @@
         <hr class="my-4">
         <!-- 댓글기능 -->
           <div>
+            <h5 class="text-left">댓글</h5>
+            <hr>
             <ul v-for="(comment,index) in comments" :key="comment.id">
                 <li v-text="comment.content">
                 </li>

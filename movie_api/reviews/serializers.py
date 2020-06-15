@@ -26,7 +26,7 @@ class ReviewCommentSerializer(serializers.ModelSerializer):
         # user = UserSerializer()
 
         model = ReviewComment
-        fields = ['content','user','id','rank']
+        fields = ['content','user','id']
         # fields = '__all__'
         read_only_fields = ['user','id']
 

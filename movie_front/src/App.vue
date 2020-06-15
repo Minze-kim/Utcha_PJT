@@ -1,7 +1,48 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="logo navbar-brand" href="#">읏챠 플레이</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <span class="nav-item active">
+                        <router-link class="homebtn nav-link" to="/">Home</router-link> 
+                    </span>
+
+                <div class='nav-item dropdown'>
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    장르별 탐색
+                    </button>
+                    <div class="dropdown-menu">
+                        <router-link v-for="genre in genres"
+                        v-bind:key="genre.id"
+                        v-bind:genre="genre.name"
+                        :to="{ name: 'MovieListGenre', params: {id: `${genre.id}` } }">{{genre.name}}<br></router-link>
+                    </div>
+                </div>
+                <span class="nav-item active">
+                    <span class="nav-link" v-if="!isLoggedIn">
+                        <router-link class="btn btn-light navitem" :to="{ name:'Signup' }">Signup</router-link> 
+                        <router-link class="btn btn-light navitem" :to="{ name:'Login' }">Login</router-link>
+                    </span>
+                </span>
+                <span class="nav-item active">
+                    <span class="nav-link" v-if="isLoggedIn">
+                        <router-link  class="btn btn-light" to="/accounts/logout" @click.native="logout">로그아웃</router-link>
+                    </span>
+                </span>
+      </ul>
+    </div>
+    <router-link class="btn btn-light" v-if="isAdmin" to="/adminpage/" >관리자 페이지</router-link>  
+  </nav>
+  </div>
+      <router-view @save-signup-data="signup" @save-login-data="login" />
+
+      <!-- <router-link to="/">Home</router-link> |
         <span v-if="!isLoggedIn">
           <router-link :to="{ name:'Signup' }">Signup</router-link> |
           <router-link :to="{ name:'Login' }">Login</router-link>
@@ -17,15 +58,13 @@
           <div class="dropdown-menu">
             <router-link v-for="genre in genres"
             v-bind:key="genre.id"
+            v-bind:genre="genre.name"
             :to="{ name: 'MovieListGenre', params: {id: `${genre.id}` } }">{{genre.name}}<br></router-link>
           </div>
-        </div>
-        <router-link v-if="isAdmin" v-bind:to="{name:'AdminPage' }">관리자 페이지</router-link>  
-    </div>
-    <router-view @save-signup-data="signup" @save-login-data="login" />
-
-
-    </div>
+        </div> -->
+    <!-- </div>
+    <router-view @save-signup-data="signup" @save-login-data="login" /> -->
+</div>
     
 
 </template>
@@ -200,23 +239,67 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
+  font-family: 'Jua', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+.logo{
+    font-weight: 900;
+    font-size: 27px;
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.dropdown-menu>a{
+    color:white;
 }
+nav{
+    height: 100px;
+}
+.homebtn{
+    color:white;
+    font-weight: 900;
+    /* font-size:40; */
+}
+.homebtn{
+    font-size:40;
+}
+nav>ul{
+    display: flex;
+    /* align-items:; */
+    justify-content: space-around;
+}
+nav.navitem{
+    text-decoration: none;
+    color:white;
+    margin:0px 10px;
+}
+.nav-link>.btn{
+    margin:0px 5px;
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+}
+.navbar{
+    background-color: #000000;
+}
+.dropdown{
+    text-align: right;
+}
+.dropdown-menu{
+    background-color:rgb(20, 21, 23);
+}
+.dropdown-toggle{
+    background-color:#2B2B2B;
+    text-align: right;
+    border:none;
+    height:45px;
+    /* padding */
+    width: 230px;
+}
+.dropdown-menu{
+    background-color:rgb(20, 21, 23);
+    width: 230px;
+    padding: 10px 15px;
+    color:white;
 }
 </style>

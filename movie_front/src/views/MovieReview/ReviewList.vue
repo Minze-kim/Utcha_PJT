@@ -1,15 +1,16 @@
 <template>
   <div>
+    <h1 class="text-white">리뷰</h1>
     <div v-if="isLoggedIn">
       <!-- <h3>{{ movie.id }}</h3> -->
       <!-- <div v-if="isLoggedIn"> -->
-      <button @click="createReview">리뷰작성</button>
-        <table class="table">
+      <button class="float-right btn btn-primary" @click="createReview">새로운 리뷰 작성</button><br>
+        <table class="table text-white">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">User</th>
+              <th scope="col">No</th>
+              <th scope="col">리뷰 제목</th>
+              <th scope="col">작성자</th>
               <th scope="col">상세보기</th>
             </tr>
           </thead>
