@@ -121,15 +121,24 @@ export default {
                     'Authorization' : `Token ${this.$cookies.get('auth-token')}`
                 }
             }
-            if (this.commentData.content){
-                // 빈 댓글 입력안하기
-                axios.post(BACKEND_SERVER + 'movies/create_comment/' + this.movie.id + '/', this.commentData, config)
-                .then(response => {
-                    this.comment = response.data
-                    this.comments.unshift(this.comment)
-                    // 작성후 없어지게하기
-                    this.commentData.content=''
-                })
+            if (this.isLoggedIn){
+                if (this.commentData.content){
+                    // 빈 댓글 입력안하기
+                    axios.post(BACKEND_SERVER + 'movies/create_comment/' + this.movie.id + '/', this.commentData, config)
+                    .then(response => {
+                        this.comment = response.data
+                        this.comments.unshift(this.comment)
+                        // 작성후 없어지게하기
+                        this.commentData.content=''
+                    })
+                }
+            }else{
+                alert('댓글을 작성하려면 로그인해주세요 :)')
+
+                //모달창이 꺼지지 않은채로 로그인폼으로 이동해버림 ㅠㅠ
+                // this.$router.push({name:'Login'}) 
+                // this.dataTarget('hide')
+                
             }
         },
 
