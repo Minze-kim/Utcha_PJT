@@ -45,3 +45,9 @@ class GenreSerializer(serializers.ModelSerializer):
         model = Genre
         fields = '__all__'
 
+class RecommendationSerializer(serializers.ModelSerializer):
+    genres_ids = GenreSerializer(many=True)
+    class Meta:
+        model = Movie
+        fields = '__all__'
+

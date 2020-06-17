@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+from django.db.models import Count
 # from django.core.paginator import Paginator
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -8,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import GenreSerializer
 from .models import Genre, Movie, Comment
 from .serializers import MovieSerializer, MovieListSerializer, GenreListSerializer, CommentSerializer,CommentListSerializer
+from .serializers import RecommendationSerializer
 
 # from django.contrib.auth.decorators import login_required
 # from django.http import JsonResponse
@@ -175,8 +177,9 @@ def recommendation(request):
     for genre in like_genres:
         name = get_object_or_404(Genre, pk=genre)
         movies = Movie.objects.annotate(num_like_users=Count(
-            'like_users')).filter(genres_ids=genre).all()
-        serializer = MovieListSerializer(movies, many=True)
+            'like_users')).filter(genres_ids=genre).all()[:8]
+        serializer = RecommendationSerializer(movies, many=True)
         genre_dict[name.genre_name] = serializer.data
         #print(genre_dict)
+    genre_dict = genre_dict
     return JsonResponse(genre_dict)
