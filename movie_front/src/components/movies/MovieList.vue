@@ -1,16 +1,15 @@
 <template>
   <div>
     <!-- <button v-on:click="getMovieList">클릭!</button> -->
-    <h1 class=my-5>{{username}} 님을 위한 추천영화</h1>
+    <h1 v-if="!userId" class=my-5>인기상영작</h1>
+    <h1 v-if="userId" class=my-5>{{username}} 님을 위한 추천영화</h1>
     <div class="container">
         <div 
         class='row ml-auto mr-auto movieList'
         v-if="!userId">
-            <div class="row">
                 <div class="col-3" v-for="movie in movieList" v-bind:key="movie.id">
-                    <img class="col-3" v-bind:src="'https://image.tmdb.org/t/p/w185/'+ movie.poster_path " alt="posterUrl">
+                    <img v-bind:src="'https://image.tmdb.org/t/p/w185/'+ movie.poster_path " alt="posterUrl">
                 </div>
-            </div>
         </div>
     </div>
     <!--포문테스트-->
