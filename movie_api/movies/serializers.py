@@ -23,14 +23,14 @@ class MovieSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['content','user']
-        read_only_fields = ['user']
+        fields = ['content','user','id']
+        read_only_fields = ['user','id']
 
 class CommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-        # read_only_fields = ['user','movie_id']
+        read_only_fields = ['user','movie_id']
 
 class GenreListSerializer(serializers.ModelSerializer):
     # user = UserSerializer()

@@ -2,13 +2,11 @@
     <div>
         <h1>{{genre}}</h1>
         <!-- <MovieList/> -->
-        <p v-if="movies.length === 0">영화가 없습니다.</p>
+        <p class="m-4 text-muted" v-if="movies.length === 0">영화가 없습니다.</p>
         <div class="container">
             <div class="row">
                     <MovieListItem :movie="movie" v-for="movie in movies" :key="movie.id" />
-                        <!-- <div v-for="movie in movies" :key="movie.id"> -->
-                            <!-- <img class="col" v-bind:src="'https://image.tmdb.org/t/p/w185/'+ movie.poster_path " alt="posterUrl"> -->
-                        <!-- </div> -->
+
             </div>
         </div>
     </div>
@@ -60,6 +58,9 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
+.container{
+    margin-top:50px;
+}
 
 </style>

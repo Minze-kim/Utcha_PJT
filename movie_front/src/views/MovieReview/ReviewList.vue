@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <div id="reviewlist">
     <h1 class="text-white">리뷰</h1>
     <div v-if="isLoggedIn">
-      <!-- <h3>{{ movie.id }}</h3> -->
-      <!-- <div v-if="isLoggedIn"> -->
-      <button class="float-right btn btn-primary" @click="createReview">새로운 리뷰 작성</button><br>
+      <div class="row">
+        <div class="col-12">
+          <button class="float-right btn btn btn-outline-light" @click="createReview">새로운 리뷰 작성</button><br>
+        </div>
+        <div class="col-12">
         <table class="table text-white">
           <thead>
             <tr>
@@ -17,12 +19,11 @@
           
           <ReviewListItem :movieId="movieId" :movie="movie" :reviews="reviews"/>
 
-        </table>
+          </table>
+          </div>
+        </div>
     </div>
-      <!-- </div> -->
-      <!-- <div v-else> -->
-        <!-- <p>로그인이 필요합니다 :)</p> -->
-      <!-- </div> -->
+
 
   </div>
 </template>
@@ -88,6 +89,15 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+#reviewlist{
+  margin: 70px 50px;
+}
+
+.btn-outline-light{
+  border:2px solid;
+  margin: 30px;
+}
 
 </style>

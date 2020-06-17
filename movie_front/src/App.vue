@@ -1,69 +1,43 @@
 <template>
   <div id="app">
-    <div>
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <a class="logo navbar-brand" href="#">읏챠 플레이</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-sm navbar-dark">
+            <router-link to="/" class="logo navbar-brand">읏챠 플레이</router-link>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav mr-auto">
-                    <span class="nav-item active">
+                    <li class="nav-item active">
                         <router-link class="homebtn nav-link" to="/">Home</router-link> 
-                    </span>
+                    </li>
 
-                <div class='nav-item dropdown'>
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    장르별 탐색
-                    </button>
-                    <div class="dropdown-menu">
-                        <router-link v-for="genre in genres"
-                        v-bind:key="genre.id"
-                        v-bind:genre="genre.name"
-                        :to="{ name: 'MovieListGenre', params: {id: `${genre.id}` } }">{{genre.name}}<br></router-link>
-                    </div>
-                </div>
-                <span class="nav-item active">
-                    <span class="nav-link" v-if="!isLoggedIn">
-                        <router-link class="btn btn-light navitem" :to="{ name:'Signup' }">Signup</router-link> 
-                        <router-link class="btn btn-light navitem" :to="{ name:'Login' }">Login</router-link>
-                    </span>
-                </span>
-                <span class="nav-item active">
-                    <span class="nav-link" v-if="isLoggedIn">
-                        <router-link  class="btn btn-light" to="/accounts/logout" @click.native="logout">로그아웃</router-link>
-                    </span>
-                </span>
-      </ul>
+                    <li class='nav-item dropdown'>
+                        <!-- <a href="#"> -->
+                        <button class="btn btn-secondary nav-link dropdown-toggle" type="button" id="#navbarNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        장르별 탐색
+                        </button>
+                        <!-- </a> -->
+                        <div class="dropdown-menu" aria-labelledby="navbarNavDropdown">
+                            <router-link class="dropdown-item" v-for="genre in genres"
+                            v-bind:key="genre.id"
+                            :to="{ name: 'MovieListGenre', params: {id: `${genre.id}` } }">{{genre.name}}<br></router-link>
+                        </div>
+                    </li>
+                    <li class='nav-item active' v-if="!isLoggedIn">
+                        <router-link style="color:black;" class="nav-link btn btn-light" :to="{ name:'Signup' }">회원가입</router-link> 
+                    </li>
+                    <li class='nav-item active' v-if="!isLoggedIn">
+                        <router-link style="color:black;" class="nav-link btn btn-light" :to="{ name:'Login' }">로그인</router-link>
+                    </li>
+                    <li class='nav-item active' v-if="isLoggedIn">
+                        <router-link  style="color:black;" class="nav-link btn btn-light" to="/accounts/logout" @click.native="logout">로그아웃</router-link>
+                    </li>
+                </ul>
     </div>
-    <router-link class="btn btn-light" v-if="isAdmin" to="/adminpage/" >관리자 페이지</router-link>  
+    <router-link class="btn btn-light" style="color:black;" v-if="isAdmin" to="/adminpage/" >관리자 페이지</router-link>  
   </nav>
-  </div>
-      <router-view @save-signup-data="signup" @save-login-data="login" />
-
-      <!-- <router-link to="/">Home</router-link> |
-        <span v-if="!isLoggedIn">
-          <router-link :to="{ name:'Signup' }">Signup</router-link> |
-          <router-link :to="{ name:'Login' }">Login</router-link>
-        </span>
-        
-        <span v-if="isLoggedIn">
-          <router-link to="/accounts/logout" @click.native="logout">로그아웃</router-link>
-        </span>
-        <div class='dropdown'>
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          장르별 탐색
-          </button>
-          <div class="dropdown-menu">
-            <router-link v-for="genre in genres"
-            v-bind:key="genre.id"
-            v-bind:genre="genre.name"
-            :to="{ name: 'MovieListGenre', params: {id: `${genre.id}` } }">{{genre.name}}<br></router-link>
-          </div>
-        </div> -->
-    <!-- </div>
-    <router-view @save-signup-data="signup" @save-login-data="login" /> -->
+    <router-view @save-signup-data="signup" @save-login-data="login" />
 </div>
     
 
@@ -157,6 +131,7 @@ export default {
       isLoggedIn: false,
       isAdmin: false,
       loginData: null,
+        errorMessage:null,
   
     }
   },
@@ -175,9 +150,18 @@ export default {
         this.$router.push({ name: 'Home'})
       
       })
-      .catch(() => {
-        // console.log(err.data.key)
-        console.log('ERROR')
+      .catch((err) => {
+          this.errorMessage = err.response.data
+          console.log(this.errorMessage)
+            if(this.errorMessage.username){
+                alert('사용자 이름을 확인하세요 :(')
+            }if (signupData.password1 !== signupData.password2){
+                alert('비밀번호가 일치하지 않습니다 :(')
+            }if ((signupData.password1).length < 8) {
+                alert('비밀번호는 8자리 이상 입력해주세요 :(')
+            }if ((signupData.password1).length >= 8) {
+                alert('비밀번호가 너무 일상적입니다 :(')
+            }
       })
     },
     login(loginData) {
@@ -187,7 +171,7 @@ export default {
         this.$router.push({ name: 'Home'})
       })
       .catch(() => {
-        console.log('ERROR')
+          alert('아이디와 비밀번호를 확인하세요 :(')
       })
     },
     
@@ -255,16 +239,14 @@ export default {
     color:white;
 }
 nav{
-    height: 100px;
+    height: 90px;
 }
 .homebtn{
     color:white;
     font-weight: 900;
-    /* font-size:40; */
-}
-.homebtn{
     font-size:40;
 }
+
 nav>ul{
     display: flex;
     /* align-items:; */
@@ -275,11 +257,11 @@ nav.navitem{
     color:white;
     margin:0px 10px;
 }
-.nav-link>.btn{
+.nav-link.btn{
     margin:0px 5px;
-
+    font-size:40;
 }
-.navbar{
+nav{
     background-color: #000000;
 }
 .dropdown{
@@ -287,6 +269,21 @@ nav.navitem{
 }
 .dropdown-menu{
     background-color:rgb(20, 21, 23);
+    position: absolute;
+    /* left: -1px; */
+    /* z-index: 999; */
+    /* box-sizing: content-box; */
+    /* left:20px; */
+    width: 70%;
+    max-height: 18.75vw;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    overflow-y: auto;
+    /* display: block; */
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.3);
+    /* border-image: initial; */
 }
 .dropdown-toggle{
     background-color:#2B2B2B;
@@ -302,4 +299,11 @@ nav.navitem{
     padding: 10px 15px;
     color:white;
 }
+
+.btn-light{
+    border-radius: 40px;
+}
+
+
+
 </style>

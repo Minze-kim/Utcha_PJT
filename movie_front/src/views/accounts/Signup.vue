@@ -16,7 +16,7 @@
             </div>
             <div>
                 <label for="password2"></label>
-                <input class="password_input2" v-model="signupData.password2" type="password" id="password2" placeholder="비밀번호 확인">
+                <input @keypress.enter="signup" class="password_input2" v-model="signupData.password2" type="password" id="password2" placeholder="비밀번호 확인">
             </div>
             <button class="signup_btn" @click="signup">회원가입</button>
 

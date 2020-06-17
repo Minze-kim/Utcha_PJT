@@ -52,7 +52,7 @@ def delete_review(request, review_pk):
 
 @api_view(['GET'])
 def get_reviews(request, movie_pk):
-    reviews = Review.objects.filter(movie = movie_pk).all()
+    reviews = Review.objects.filter(movie = movie_pk).order_by('-pk')
     serializer = ReviewSerializer(reviews, many=True)
     return Response(serializer.data)
 
@@ -72,7 +72,7 @@ def create_comment(request, review_pk):
 
 @api_view(['GET'])
 def get_comments(request,review_pk):
-    reviewcomments = ReviewComment.objects.filter(review_id=review_pk).all()
+    reviewcomments = ReviewComment.objects.filter(review_id=review_pk).order_by('-pk')
     serializer = ReviewCommentListSerializer(reviewcomments,many=True)
     return Response(serializer.data)
 

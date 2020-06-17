@@ -4,7 +4,7 @@
             <th scope="row">{{ index + 1 }}</th>
             <td>{{ review.title }}</td>
             <td>{{ review.user.username }}</td>
-            <td><button class="btn btn-info" @click="checkDetail(review.id,mId)" :review="review">상세보기</button></td>
+            <td><button class="btn btn-info" @click="checkDetail(review.id)" :review="review">상세보기</button></td>
         </tr>
     </tbody>
 </template>
@@ -25,9 +25,9 @@ export default {
         }
     },
     methods:{
-        checkDetail(id,mId){
+        checkDetail(id){
             
-            this.$router.push({ name:'ReviewItemDetail', params:{id:id}},mId)
+            this.$router.push({ name:'ReviewItemDetail', params:{id:id}})
         }
     }
 }

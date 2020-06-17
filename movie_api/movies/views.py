@@ -107,7 +107,7 @@ def create_comment(request, movie_pk):
 
 @api_view(['GET'])
 def get_comments(request,movie_pk):
-    comments = Comment.objects.filter(movie_id=movie_pk).all()
+    comments = Comment.objects.filter(movie_id=movie_pk).order_by('-pk')
     serializer = CommentListSerializer(comments,many=True)
     return Response(serializer.data)
 
