@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 # from django.core.paginator import Paginator
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -117,3 +118,65 @@ def delete_comment(reqeust, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     comment.delete()
     return Response(status=200)
+
+
+@api_view(['POST'])
+def like(request, movie_pk):
+    print(request.user)
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    user = request.user
+    if movie.like_users.filter(id=user.pk).exists():
+        movie.like_users.remove(user)
+        liked = False
+
+    else:
+        movie.like_users.add(user)
+        liked = True
+
+    context = {
+        'liked': liked,
+        #'count': like_movies
+    }
+
+    return JsonResponse(context)
+
+
+@api_view(['GET'])
+def checkLike(request, movie_pk):
+    user = request.user
+    print(user)
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    if movie.like_users.filter(id=request.user.pk).exists():
+        print('yes')
+        liked = True
+    else:
+        liked = False
+        print('no')
+    context = {
+        'liked': liked,
+    }
+    return JsonResponse(context)
+
+
+#추천 알고리즘
+@api_view(['GET'])
+def recommendation(request):
+    user = request.user
+    #유저가 좋아한 영화의 장르 추출
+    like_genres = set()  # 중복제거위해 set 사용
+    for movie in user.like_movies.all():
+        #print(movie.genres_ids.values('id'))
+        for genre in movie.genres_ids.all().values('id'):
+            like_genres.add(genre['id'])
+    print(like_genres)
+
+    #좋아하는 장르별 영화 추천(좋아요 눌러진순)
+    genre_dict = {}
+    for genre in like_genres:
+        name = get_object_or_404(Genre, pk=genre)
+        movies = Movie.objects.annotate(num_like_users=Count(
+            'like_users')).filter(genres_ids=genre).all()
+        serializer = MovieListSerializer(movies, many=True)
+        genre_dict[name.genre_name] = serializer.data
+        #print(genre_dict)
+    return JsonResponse(genre_dict)

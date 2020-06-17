@@ -16,5 +16,8 @@ urlpatterns=[
     path('create_comment/<int:movie_pk>/',views.create_comment, name="create_comment"),
     path('get_comments/<int:movie_pk>/', views.get_comments),
     path('delete_comment/<int:comment_pk>/',views.delete_comment),
+    path('like/<int:movie_pk>/', views.like),
+    path('checklike/<int:movie_pk>/', views.checkLike),
+    path('recommendation/', views.recommendation)
 
     ]

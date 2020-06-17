@@ -2,7 +2,8 @@
     <div class="modalitems">
         <a 
         data-toggle="modal"
-        v-bind:data-target="dataTarget" >
+        v-bind:data-target="dataTarget" 
+        @click="validateLike">
             <!-- 모달 -->
             <figure  class="snip1273 scale">
                 <img class="posterimg" 
@@ -24,6 +25,8 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ movie.title }}</h5>
+                <font-awesome-icon icon="heart" id="like-button" class="mt-1 ml-2" v-bind:style="{color: likeColor}"
+                @click="like"/>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -93,6 +96,7 @@ export default {
             comments: [],
             isLoggedIn: false,
             currentUser: null,
+            likeColor: null,
         }
     },
     computed: {
@@ -161,6 +165,40 @@ export default {
                 this.isLoggedIn = true
                 }
             )
+        },
+        like() {
+            const config = {
+                headers:{
+                    'Authorization' : `Token ${this.$cookies.get('auth-token')}`
+                }
+            }
+            axios.post(BACKEND_SERVER + 'movies/like/' + this.movie.id + '/', null, config)
+            .then(response=>{
+                console.log(response.data.liked)
+                if (response.data.liked === true) {
+                    this.likeColor = 'crimson'
+                } else {
+                    this.likeColor = 'black'
+                }
+            })
+        },
+        validateLike() {
+            const config = {
+                headers:{
+                    'Authorization' : `Token ${this.$cookies.get('auth-token')}`
+                }
+            }
+            console.log(config)
+            axios.get(BACKEND_SERVER + `movies/checklike/${this.movie.id}/`, config)
+            .then(response => {
+                console.log(response)
+                if (response.data.liked === true) {
+                    this.likeColor = 'crimson'
+                } else {
+                    this.likeColor = 'black'
+                }
+                
+            })
         }
     },
     mounted(){
