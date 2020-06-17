@@ -166,20 +166,33 @@ def recommendation(request):
     user = request.user
     #유저가 좋아한 영화의 장르 추출
     like_genres = set()  # 중복제거위해 set 사용
-    for movie in user.like_movies.all():
-        #print(movie.genres_ids.values('id'))
-        for genre in movie.genres_ids.all().values('id'):
-            like_genres.add(genre['id'])
-    print(like_genres)
+    if user.like_movies.exists():
+        for movie in user.like_movies.all():
+            #print(movie.genres_ids.values('id'))
+            for genre in movie.genres_ids.all().values('id'):
+                like_genres.add(genre['id'])
+        print(like_genres)
 
-    #좋아하는 장르별 영화 추천(좋아요 눌러진순)
-    genre_dict = {}
-    for genre in like_genres:
-        name = get_object_or_404(Genre, pk=genre)
-        movies = Movie.objects.annotate(num_like_users=Count(
-            'like_users')).filter(genres_ids=genre).all()[:8]
-        serializer = RecommendationSerializer(movies, many=True)
-        genre_dict[name.genre_name] = serializer.data
-        #print(genre_dict)
-    genre_dict = genre_dict
-    return JsonResponse(genre_dict)
+        #좋아하는 장르별 영화 추천(좋아요 눌러진순)
+        genre_dict = {}
+        for genre in like_genres:
+            name = get_object_or_404(Genre, pk=genre)
+            movies = Movie.objects.annotate(num_like_users=Count(
+                'like_users')).filter(genres_ids=genre).all()[:8]
+            serializer = RecommendationSerializer(movies, many=True)
+            genre_dict[name.genre_name] = serializer.data
+            #print(genre_dict)
+        #genre_dict = genre_dict
+        return JsonResponse(genre_dict)
+
+    #좋아요 누른 영화가 없을 경우
+    else:
+        genre_dict = {}
+        for genre in Genre.objects.all():
+            print(genre.id, genre.genre_name)
+            movies = Movie.objects.annotate(num_like_users=Count('like_users')).filter(genres_ids=genre.id).all()[:8]
+            serializer = MovieListSerializer(movies, many=True)
+            genre_dict[genre.genre_name] = serializer.data
+        return JsonResponse(genre_dict)
+
+        
